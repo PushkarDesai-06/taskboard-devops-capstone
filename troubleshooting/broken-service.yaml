@@ -1,0 +1,29 @@
+# TROUBLESHOOTING LAB 2: a Service whose selector matches no Pods.
+#
+#   kubectl apply -f troubleshooting/broken-service.yaml
+#   kubectl get svc -n taskboard
+#   kubectl get endpoints -n taskboard taskboard-api-broken   -> ENDPOINTS <none>
+#   kubectl get pods -n taskboard --show-labels               -> pods say taskboard-backend
+#   kubectl run curl -n taskboard --rm -it --restart=Never --image=curlimages/curl -- \
+#       curl -m 5 http://taskboard-api-broken:8000/health         -> connection fails
+#
+# The selector says "taskboard-api" but the backend Pods are labelled
+# app.kubernetes.io/name=taskboard-backend. No matching labels = no endpoints = no traffic.
+#
+# Fix:
+#   kubectl patch svc -n taskboard taskboard-api-broken --type merge \
+#     -p '{"spec":{"selector":{"app.kubernetes.io/name":"taskboard-backend"}}}'
+# Clean up with:
+#   kubectl delete -f troubleshooting/broken-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: taskboard-api-broken
+  namespace: taskboard
+spec:
+  selector:
+    app.kubernetes.io/name: taskboard-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000

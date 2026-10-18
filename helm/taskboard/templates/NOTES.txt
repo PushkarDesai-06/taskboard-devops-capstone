@@ -1,0 +1,20 @@
+TaskBoard {{ .Chart.AppVersion }} deployed as release "{{ .Release.Name }}" in namespace "{{ .Release.Namespace }}".
+
+  kubectl get pods,svc -n {{ .Release.Namespace }}
+{{- if .Values.hpa.enabled }}
+  kubectl get hpa -n {{ .Release.Namespace }}
+{{- end }}
+{{- if .Values.ingress.enabled }}
+
+Ingress:
+  kubectl get ingress -n {{ .Release.Namespace }}
+{{- if .Values.ingress.host }}
+  then open http://{{ .Values.ingress.host }}
+{{- else }}
+  then open http://<ADDRESS shown above>
+{{- end }}
+{{- else }}
+
+No ingress enabled. Try:
+  kubectl port-forward -n {{ .Release.Namespace }} svc/{{ include "taskboard.fullname" . }}-frontend 3000:80
+{{- end }}

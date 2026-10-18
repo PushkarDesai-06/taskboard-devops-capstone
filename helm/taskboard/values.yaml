@@ -1,0 +1,70 @@
+# Default values. Environment specific overrides live in values-dev.yaml / values-eks.yaml.
+
+imagePullSecrets: []
+# - name: ghcr-pull
+
+backend:
+  image:
+    repository: ghcr.io/pushkardesai-06/taskboard-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicas: 2
+  port: 8000
+  # HPA percentages are relative to these requests, so requests are mandatory.
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+frontend:
+  image:
+    repository: ghcr.io/pushkardesai-06/taskboard-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicas: 2
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+postgres:
+  image: postgres:16-alpine
+  database: taskboard
+  username: taskboard
+  # Demo only. In production use AWS Secrets Manager / External Secrets, or RDS.
+  password: taskboard-demo-password
+  storage: 1Gi
+  storageClass: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 50
+
+ingress:
+  enabled: false
+  className: nginx
+  # Leave empty to answer on any hostname (e.g. the raw AWS load balancer DNS name).
+  host: ""
+
+monitoring:
+  # Requires the Prometheus Operator CRDs (kube-prometheus-stack).
+  serviceMonitor:
+    enabled: false
+    interval: 15s
+  # Ships the TaskBoard Grafana dashboard as a ConfigMap picked up by the Grafana sidecar.
+  grafanaDashboard:
+    enabled: false

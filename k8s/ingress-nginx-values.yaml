@@ -1,0 +1,13 @@
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+#   -n ingress-nginx --create-namespace -f k8s/ingress-nginx-values.yaml
+controller:
+  replicaCount: 1
+  service:
+    type: LoadBalancer
+    annotations:
+      # internet-facing Network Load Balancer in the public subnets
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+  metrics:
+    enabled: true

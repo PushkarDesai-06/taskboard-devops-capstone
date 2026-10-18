@@ -1,0 +1,6 @@
+# Classroom / local cluster: expose the app at http://taskboard.local through ingress-nginx.
+# Add "<ingress IP>  taskboard.local" to /etc/hosts.
+ingress:
+  enabled: true
+  className: nginx
+  host: taskboard.local

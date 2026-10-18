@@ -1,0 +1,15 @@
+# AWS EKS: ingress-nginx behind an AWS load balancer, EBS-backed PostgreSQL,
+# and Prometheus/Grafana integration.
+ingress:
+  enabled: true
+  className: nginx
+  host: ""
+
+postgres:
+  storageClass: gp3
+
+monitoring:
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true

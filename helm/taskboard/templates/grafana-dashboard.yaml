@@ -1,0 +1,14 @@
+{{- if .Values.monitoring.grafanaDashboard.enabled }}
+# The Grafana sidecar from kube-prometheus-stack loads every ConfigMap labelled
+# grafana_dashboard=1 (searchNamespace: ALL in monitoring/kube-prometheus-stack-values.yaml).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "taskboard.fullname" . }}-grafana-dashboard
+  labels:
+    {{- include "taskboard.labels" . | nindent 4 }}
+    grafana_dashboard: "1"
+data:
+  taskboard.json: |-
+{{ .Files.Get "dashboards/taskboard.json" | indent 4 }}
+{{- end }}
