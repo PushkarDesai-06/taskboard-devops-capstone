@@ -16,6 +16,7 @@ dist/
 *.tfvars
 !example.tfvars
 crash.log
+tfplan
 
 # Editors / OS
 .vscode/

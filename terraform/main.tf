@@ -62,6 +62,20 @@ module "eks" {
     metrics-server = {}
   }
 
+  # The EKS metrics-server add-on serves on 10251, which the module's default
+  # node security group does not open to the control plane. Without this rule
+  # the metrics API times out and the HPA shows <unknown>.
+  node_security_group_additional_rules = {
+    metrics_server_from_control_plane = {
+      description                   = "Control plane to metrics-server"
+      protocol                      = "tcp"
+      from_port                     = 10251
+      to_port                       = 10251
+      type                          = "ingress"
+      source_cluster_security_group = true
+    }
+  }
+
   eks_managed_node_groups = {
     default = {
       instance_types = [var.node_instance_type]
