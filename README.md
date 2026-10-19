@@ -4,7 +4,7 @@ A small SaaS-style task manager used to show the full path from a developer lapt
 
 **Stack:** React + Vite, FastAPI, PostgreSQL, SQLAlchemy, Alembic, Pytest, Docker, GitHub Actions, Trivy, GHCR, Terraform, AWS VPC + EKS, Helm, ingress-nginx, HPA, Prometheus, Grafana.
 
-The full walkthrough is in [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Evidence for every step is in [`screenshots/`](screenshots/).
+The full walkthrough is in [PROJECT_BRIEF.md](PROJECT_BRIEF.md). Evidence for every demo step, with captions, is in [SCREENSHOTS.md](SCREENSHOTS.md).
 
 ## Quick start (local)
 
